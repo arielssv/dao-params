@@ -14,7 +14,13 @@ function toISODate(dateStr: string): string {
 
 export default async function handler(_req: VercelRequest, res: VercelResponse) {
   try {
-    const response = await fetch('https://etherscan.io/chart/gasprice?output=csv');
+    const response = await fetch('https://etherscan.io/chart/gasprice?output=csv', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Referer': 'https://etherscan.io/',
+      },
+    });
     if (!response.ok) {
       res.status(502).json({ error: `Etherscan returned ${response.status}` });
       return;
