@@ -21,6 +21,35 @@ function blocksToDays(blocks: number): string {
   return `~${days} days`;
 }
 
+function CopyButton({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy(e: React.MouseEvent) {
+    e.stopPropagation();
+    navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="inline-flex items-center ml-1.5 text-gray-300 hover:text-gray-500 dark:text-gray-600 dark:hover:text-gray-400 transition-colors"
+      title="Copy value"
+    >
+      {copied ? (
+        <svg className="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+      ) : (
+        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
 export function ParameterCard({ param, inputs }: ParameterCardProps) {
   const [expanded, setExpanded] = useState(false);
   const hasAnnual = param.calculatedAnnual !== undefined && param.unitAnnual;
@@ -38,6 +67,9 @@ export function ParameterCard({ param, inputs }: ParameterCardProps) {
   const primaryUnit = hasAnnual ? param.unitAnnual! : param.unit;
   const isBlocks = primaryUnit === 'blocks';
 
+  const primaryCurrentStr = formatValue(primaryCurrent, primaryUnit);
+  const primaryCalculatedStr = formatValue(primaryCalculated, primaryUnit);
+
   return (
     <div className="bg-white rounded-lg shadow dark:bg-gray-800">
       {/* Clickable header row */}
@@ -53,7 +85,10 @@ export function ParameterCard({ param, inputs }: ParameterCardProps) {
         {/* Current */}
         <div className="flex-1 text-center">
           <div className="text-[10px] text-gray-400 uppercase tracking-wide">Current</div>
-          <div className="text-sm font-mono font-semibold dark:text-gray-100">{formatValue(primaryCurrent, primaryUnit)}</div>
+          <div className="text-sm font-mono font-semibold dark:text-gray-100 inline-flex items-center">
+            {primaryCurrentStr}
+            <CopyButton value={primaryCurrentStr} />
+          </div>
           <div className="text-[10px] text-gray-400">
             {primaryUnit}
             {isBlocks && primaryCurrent > 0 && (
@@ -65,7 +100,10 @@ export function ParameterCard({ param, inputs }: ParameterCardProps) {
         {/* Calculated */}
         <div className="flex-1 text-center">
           <div className="text-[10px] text-gray-400 uppercase tracking-wide">Calculated</div>
-          <div className="text-sm font-mono font-semibold dark:text-gray-100">{formatValue(primaryCalculated, primaryUnit)}</div>
+          <div className="text-sm font-mono font-semibold dark:text-gray-100 inline-flex items-center">
+            {primaryCalculatedStr}
+            <CopyButton value={primaryCalculatedStr} />
+          </div>
           <div className="text-[10px] text-gray-400">
             {primaryUnit}
             {isBlocks && primaryCalculated > 0 && (
@@ -101,14 +139,16 @@ export function ParameterCard({ param, inputs }: ParameterCardProps) {
             <div className="mt-3 mb-3 flex gap-10">
               <div>
                 <div className="text-[10px] text-gray-400 uppercase">Current (per block)</div>
-                <div className="text-xs font-mono text-gray-600 dark:text-gray-300">
-                  {formatValue(param.current, param.unit)} <span className="text-gray-400">{param.unit}</span>
+                <div className="text-xs font-mono text-gray-600 dark:text-gray-300 inline-flex items-center">
+                  {formatValue(param.current, param.unit)} <span className="text-gray-400 ml-1">{param.unit}</span>
+                  <CopyButton value={formatValue(param.current, param.unit)} />
                 </div>
               </div>
               <div>
                 <div className="text-[10px] text-gray-400 uppercase">Calculated (per block)</div>
-                <div className="text-xs font-mono text-gray-600 dark:text-gray-300">
-                  {formatValue(param.calculated, param.unit)} <span className="text-gray-400">{param.unit}</span>
+                <div className="text-xs font-mono text-gray-600 dark:text-gray-300 inline-flex items-center">
+                  {formatValue(param.calculated, param.unit)} <span className="text-gray-400 ml-1">{param.unit}</span>
+                  <CopyButton value={formatValue(param.calculated, param.unit)} />
                 </div>
               </div>
             </div>
