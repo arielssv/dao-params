@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { DataExplorer } from './components/DataExplorer';
+
 type Tab = 'dashboard' | 'data';
 
 export default function App() {
@@ -40,16 +42,11 @@ export default function App() {
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-lg font-semibold mb-2">Parameter Dashboard</h2>
             <p className="text-gray-500">
-              Parameter cards and deviation summary will appear here.
+              Parameter cards and deviation summary will appear here (Milestone 2).
             </p>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold mb-2">Data Explorer</h2>
-            <p className="text-gray-500">
-              Raw data tables and charts will appear here.
-            </p>
-          </div>
+          <DataExplorer />
         )}
       </main>
     </div>
