@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 async function fetchKlines(symbol: string, limit: number): Promise<number[][]> {
-  const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=${limit}`;
+  const url = `https://data-api.binance.vision/api/v3/klines?symbol=${symbol}&interval=1d&limit=${limit}`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Binance ${symbol} returned ${response.status}`);
