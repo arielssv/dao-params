@@ -61,16 +61,6 @@ interface CachedData {
   currentEthThreshold: number;
 }
 
-function filterNDaysBefore<T extends { date: string }>(data: T[], days: number, endDate?: string): T[] {
-  if (data.length === 0) return [];
-  const end = endDate ? new Date(endDate) : new Date();
-  const cutoff = new Date(end);
-  cutoff.setDate(cutoff.getDate() - days);
-  const cutoffStr = cutoff.toISOString().split('T')[0];
-  const endStr = end.toISOString().split('T')[0];
-  return data.filter((d) => d.date >= cutoffStr && d.date <= endStr);
-}
-
 function filterByMonth<T extends { date: string }>(data: T[], yearMonth: string): T[] {
   return data.filter((d) => d.date.startsWith(yearMonth));
 }
