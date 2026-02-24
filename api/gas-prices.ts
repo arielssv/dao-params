@@ -1,5 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
+export const config = {
+  runtime: 'nodejs',
+  regions: ['lhr1'],
+};
+
 function toISODate(dateStr: string): string {
   // Convert "M/D/YYYY" to "YYYY-MM-DD"
   const parts = dateStr.split('/');
