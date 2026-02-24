@@ -54,4 +54,7 @@ export interface ParameterResult {
   deviation: number;
   exceeds15pct: boolean;
   unit: string;
+  calculatedAnnual?: number;
+  currentAnnual?: number;
+  unitAnnual?: string;
 }

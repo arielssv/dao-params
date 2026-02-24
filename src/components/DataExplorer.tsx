@@ -196,7 +196,7 @@ export function DataExplorer() {
               className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
                 tab === t.key
                   ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
               }`}
             >
               {t.label}
@@ -212,7 +212,7 @@ export function DataExplorer() {
           <button
             onClick={fetchGasAndPrices}
             disabled={loading}
-            className="px-3 py-1.5 bg-gray-800 text-white text-sm rounded hover:bg-gray-700 disabled:opacity-50"
+            className="px-3 py-1.5 bg-gray-800 text-white text-sm rounded hover:bg-gray-700 disabled:opacity-50 dark:bg-gray-600 dark:hover:bg-gray-500"
           >
             {loading ? 'Loading...' : 'Refresh'}
           </button>
@@ -221,14 +221,14 @@ export function DataExplorer() {
 
       {/* Date range picker (for gas + ETH/SSV) */}
       {tab !== 'apr' && (
-        <div className="bg-white rounded-lg shadow px-4 py-3 flex flex-wrap items-center gap-3">
-          <span className="text-xs font-medium text-gray-500 uppercase">Date Range</span>
+        <div className="bg-white rounded-lg shadow px-4 py-3 flex flex-wrap items-center gap-3 dark:bg-gray-800">
+          <span className="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Date Range</span>
           <div className="flex items-center gap-1">
             {presets.map((p) => (
               <button
                 key={p.label}
                 onClick={() => applyPreset(p.days)}
-                className="px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-100 text-gray-600"
+                className="px-2 py-1 text-xs rounded border border-gray-200 hover:bg-gray-100 text-gray-600 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
               >
                 {p.label}
               </button>
@@ -239,21 +239,21 @@ export function DataExplorer() {
               type="date"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="border border-gray-300 rounded px-2 py-1 text-xs"
+              className="border border-gray-300 rounded px-2 py-1 text-xs dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             />
             <span className="text-gray-400 text-xs">to</span>
             <input
               type="date"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="border border-gray-300 rounded px-2 py-1 text-xs"
+              className="border border-gray-300 rounded px-2 py-1 text-xs dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             />
           </div>
         </div>
       )}
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm dark:bg-red-900/30 dark:border-red-700 dark:text-red-300">
           {error}
         </div>
       )}
@@ -277,7 +277,7 @@ export function DataExplorer() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" tickFormatter={formatDate} fontSize={11} interval="preserveStartEnd" />
                 <YAxis fontSize={11} />
-                <Tooltip labelFormatter={formatDate} />
+                <Tooltip labelFormatter={(label) => formatDate(String(label ?? ''))} />
                 <Line type="monotone" dataKey="gwei" stroke="#3b82f6" dot={false} strokeWidth={1.5} />
               </LineChart>
             </ResponsiveContainer>
@@ -308,7 +308,7 @@ export function DataExplorer() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" tickFormatter={formatDate} fontSize={11} interval="preserveStartEnd" />
                 <YAxis fontSize={11} />
-                <Tooltip labelFormatter={formatDate} />
+                <Tooltip labelFormatter={(label) => formatDate(String(label ?? ''))} />
                 <Line type="monotone" dataKey="ethSsv" stroke="#8b5cf6" dot={false} strokeWidth={1.5} name="ETH/SSV" />
               </LineChart>
             </ResponsiveContainer>
@@ -330,13 +330,13 @@ export function DataExplorer() {
       {tab === 'apr' && (
         <div className="space-y-4">
           {/* Date picker */}
-          <div className="bg-white rounded-lg shadow px-4 py-3 flex flex-wrap items-center gap-3">
-            <span className="text-xs font-medium text-gray-500 uppercase">APR as of date</span>
+          <div className="bg-white rounded-lg shadow px-4 py-3 flex flex-wrap items-center gap-3 dark:bg-gray-800">
+            <span className="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">APR as of date</span>
             <input
               type="date"
               value={aprDate}
               onChange={(e) => setAprDate(e.target.value)}
-              className="border border-gray-300 rounded px-2 py-1 text-xs"
+              className="border border-gray-300 rounded px-2 py-1 text-xs dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
             />
             <button
               onClick={() => fetchAprData(aprDate || undefined)}
@@ -354,10 +354,15 @@ export function DataExplorer() {
             </button>
           </div>
 
-          {aprResponse && (
+          {aprResponse && (() => {
+            const endD = new Date(aprResponse.date);
+            const startD = new Date(endD);
+            startD.setDate(startD.getDate() - 30);
+            const aprDateRange = `${startD.toISOString().split('T')[0]} to ${aprResponse.date}`;
+            return (
             <>
               <StatsPanel
-                title={`ETH Staking APR — ${aprResponse.date}`}
+                title={`ETH Staking APR — ${aprDateRange}`}
                 stats={[
                   { label: 'Day APR', value: `${(aprResponse.apr * 100).toFixed(4)}%` },
                   { label: '31d Avg APR', value: `${(aprResponse.avgApr31d * 100).toFixed(4)}%` },
@@ -381,7 +386,7 @@ export function DataExplorer() {
                       tickFormatter={(v: number) => `${v.toFixed(2)}%`}
                     />
                     <YAxis type="category" dataKey="name" fontSize={11} width={150} />
-                    <Tooltip formatter={(value: number) => [`${value.toFixed(4)}%`, 'APR']} />
+                    <Tooltip formatter={(value) => [`${Number(value ?? 0).toFixed(4)}%`, 'APR']} />
                     <Legend />
                     <Bar dataKey="value" name="APR %">
                       {aprBreakdown.map((entry, idx) => (
@@ -397,10 +402,11 @@ export function DataExplorer() {
                 filename={`eth-apr-${aprResponse.date}`}
               />
             </>
-          )}
+            );
+          })()}
 
           {!aprResponse && !aprLoading && (
-            <div className="bg-gray-50 border border-gray-200 text-gray-500 px-4 py-6 rounded text-sm text-center">
+            <div className="bg-gray-50 border border-gray-200 text-gray-500 px-4 py-6 rounded text-sm text-center dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
               Loading latest APR data...
             </div>
           )}
@@ -412,13 +418,13 @@ export function DataExplorer() {
 
 function StatsPanel({ title, stats }: { title: string; stats: { label: string; value: string }[] }) {
   return (
-    <div className="bg-white rounded-lg shadow p-4">
-      <h3 className="text-sm font-semibold text-gray-700 mb-3">{title}</h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+    <div className="bg-white rounded-lg shadow p-4 dark:bg-gray-800">
+      <h3 className="text-sm font-semibold text-gray-700 mb-3 dark:text-gray-200">{title}</h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-3 pt-3">
         {stats.map((s) => (
-          <div key={s.label} className="bg-gray-50 rounded p-2">
-            <div className="text-xs text-gray-500">{s.label}</div>
-            <div className="text-sm font-mono font-medium">{s.value}</div>
+          <div key={s.label}>
+            <div className="text-xs text-gray-500 dark:text-gray-400">{s.label}</div>
+            <div className="text-sm font-mono font-medium dark:text-gray-200">{s.value}</div>
           </div>
         ))}
       </div>
@@ -428,8 +434,8 @@ function StatsPanel({ title, stats }: { title: string; stats: { label: string; v
 
 function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-lg shadow p-4">
-      <h3 className="text-sm font-semibold text-gray-700 mb-3">{title}</h3>
+    <div className="bg-white rounded-lg shadow p-4 dark:bg-gray-800">
+      <h3 className="text-sm font-semibold text-gray-700 mb-3 dark:text-gray-200">{title}</h3>
       {children}
     </div>
   );
@@ -440,13 +446,13 @@ function ExportButtons({ data, filename }: { data: unknown[]; filename: string }
     <div className="flex gap-2">
       <button
         onClick={() => exportData(data, filename, 'csv')}
-        className="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50"
+        className="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
       >
         Export CSV
       </button>
       <button
         onClick={() => exportData(data, filename, 'json')}
-        className="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50"
+        className="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
       >
         Export JSON
       </button>
@@ -457,23 +463,23 @@ function ExportButtons({ data, filename }: { data: unknown[]; filename: string }
 function DataTable({ columns, rows }: { columns: string[]; rows: string[][] }) {
   if (rows.length === 0) return <p className="text-sm text-gray-400">No data available.</p>;
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="bg-white rounded-lg shadow overflow-hidden dark:bg-gray-800">
       <div className="overflow-x-auto max-h-96">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 sticky top-0">
+          <thead className="bg-gray-50 sticky top-0 dark:bg-gray-700">
             <tr>
               {columns.map((c) => (
-                <th key={c} className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                <th key={c} className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">
                   {c}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
             {rows.map((row, i) => (
-              <tr key={i} className="hover:bg-gray-50">
+              <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-700/40">
                 {row.map((cell, j) => (
-                  <td key={j} className="px-4 py-1.5 font-mono text-xs">
+                  <td key={j} className="px-4 py-1.5 font-mono text-xs dark:text-gray-300">
                     {cell}
                   </td>
                 ))}
@@ -483,7 +489,7 @@ function DataTable({ columns, rows }: { columns: string[]; rows: string[][] }) {
         </table>
       </div>
       {rows.length >= 100 && (
-        <div className="px-4 py-2 text-xs text-gray-400 bg-gray-50 border-t">
+        <div className="px-4 py-2 text-xs text-gray-400 bg-gray-50 border-t dark:bg-gray-700 dark:border-gray-600">
           Showing last 100 entries. Export for full dataset.
         </div>
       )}
