@@ -13,11 +13,7 @@ function toISODate(dateStr: string): string {
   return dateStr;
 }
 
-export async function fetchGasPrices(): Promise<GasPriceEntry[]> {
-  // Fetch static CSV from public folder (avoids Etherscan blocking cloud IPs)
-  const res = await fetch('/gas-data.csv');
-  if (!res.ok) throw new Error(`Gas data fetch error: ${res.status}`);
-  const csv = await res.text();
+function parseGasCsv(csv: string): GasPriceEntry[] {
   const lines = csv.trim().split('\n');
   return lines.slice(1).map((line) => {
     const parts = line.split(',');
@@ -27,6 +23,18 @@ export async function fetchGasPrices(): Promise<GasPriceEntry[]> {
     const gwei = wei / 1e9;
     return { date, gwei };
   });
+}
+
+export async function fetchGasPrices(): Promise<GasPriceEntry[]> {
+  // Try live data from proxy first, fall back to static CSV
+  try {
+    const res = await fetch(`${BASE}/api/gas-prices`);
+    if (res.ok) return res.json();
+  } catch { /* fall through */ }
+
+  const res = await fetch('/gas-data.csv');
+  if (!res.ok) throw new Error(`Gas data fetch error: ${res.status}`);
+  return parseGasCsv(await res.text());
 }
 
 export async function fetchEthSsvPrices(limit = 365): Promise<EthSsvPriceEntry[]> {
