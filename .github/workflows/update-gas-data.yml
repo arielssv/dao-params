@@ -14,18 +14,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download gas price CSV from Etherscan
+      - name: Download gas price CSV
         run: curl -sf "https://etherscan.io/chart/gasprice?output=csv" -o public/gas-data.csv
 
-      - name: Commit and push if changed
+      - name: Push updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/gas-data.csv
           if git diff --cached --quiet; then
             echo "No changes to commit"
-          else
-            git commit -m "chore: update gas price data $(date -u +%Y-%m-%d)"
-            git pull --rebase
-            git push
+            exit 0
           fi
+          git commit -m "chore: update gas price data $(date -u +%Y-%m-%d)"
+          git fetch origin main
+          git rebase origin/main
+          git push
