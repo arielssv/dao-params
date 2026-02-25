@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - name: Download gas price CSV from Etherscan
         run: curl -s "https://etherscan.io/chart/gasprice?output=csv" -o public/gas-data.csv
