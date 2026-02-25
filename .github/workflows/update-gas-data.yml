@@ -13,23 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          persist-credentials: true
 
       - name: Download gas price CSV from Etherscan
-        run: curl -s "https://etherscan.io/chart/gasprice?output=csv" -o public/gas-data.csv
+        run: curl -sf "https://etherscan.io/chart/gasprice?output=csv" -o public/gas-data.csv
 
-      - name: Check if data changed
-        id: diff
-        run: |
-          git diff --quiet public/gas-data.csv && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
-
-      - name: Commit and push
-        if: steps.diff.outputs.changed == 'true'
+      - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/gas-data.csv
-          git commit -m "chore: update gas price data $(date -u +%Y-%m-%d)"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update gas price data $(date -u +%Y-%m-%d)"
+            git pull --rebase
+            git push
+          fi
