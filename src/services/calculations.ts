@@ -67,9 +67,9 @@ export function calcMinCollateralSSV(gasStats: GasStats, ethSsvStats: EthSsvStat
   );
 }
 
-/** Liquidation Threshold (SSV) = maxConsecDays × MaxDev → ceil to weeks → blocks */
+/** Liquidation Threshold (SSV) = (maxConsecDays + 1) × MaxDev → ceil to weeks → blocks */
 export function calcThresholdSSV(gasStats: GasStats, ethSsvStats: EthSsvStats): number {
-  const rawDays = gasStats.maxConsecHighGasDays * ethSsvStats.maxDev;
+  const rawDays = (gasStats.maxConsecHighGasDays + 1) * ethSsvStats.maxDev;
   const ceiledWeeks = Math.ceil(rawDays / 7) * 7;
   return ceiledWeeks * BLOCKS_PER_DAY;
 }
@@ -86,9 +86,9 @@ export function calcMinCollateralETH(gasStats: GasStats): number {
   return GAS_UNITS_LIQUIDATION * (gasStats.mean + gasStats.stdev) * 1e-9;
 }
 
-/** Liquidation Threshold (ETH) = maxConsecDays → raw days → blocks (no week rounding) */
+/** Liquidation Threshold (ETH) = (maxConsecDays + 1) → raw days → blocks (no week rounding) */
 export function calcThresholdETH(gasStats: GasStats): number {
-  return gasStats.maxConsecHighGasDays * BLOCKS_PER_DAY;
+  return (gasStats.maxConsecHighGasDays + 1) * BLOCKS_PER_DAY;
 }
 
 // ── Deviation Check ─────────────────────────────────────────────────────────
