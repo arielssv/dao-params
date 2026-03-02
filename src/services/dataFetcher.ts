@@ -26,12 +26,6 @@ function parseGasCsv(csv: string): GasPriceEntry[] {
 }
 
 export async function fetchGasPrices(): Promise<GasPriceEntry[]> {
-  // Try live data from proxy first, fall back to static CSV
-  try {
-    const res = await fetch(`${BASE}/api/gas-prices`);
-    if (res.ok) return res.json();
-  } catch { /* fall through */ }
-
   const res = await fetch('/gas-data.csv');
   if (!res.ok) throw new Error(`Gas data fetch error: ${res.status}`);
   return parseGasCsv(await res.text());

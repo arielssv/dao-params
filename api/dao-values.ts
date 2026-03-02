@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const SUBGRAPH_URL = 'https://api.studio.thegraph.com/query/71118/ssv-network-ethereum/version/latest';
+const SUBGRAPH_BASE = 'https://gateway.thegraph.com/api/subgraphs/id/7V45fKPugp9psQjgrGsfif98gWzCyC6ChN7CW98VyQnr';
 
 // First try with SSV-suffixed fields (post-upgrade), fallback to basic fields (pre-upgrade)
 const QUERY_POST_UPGRADE = `{
@@ -24,10 +24,16 @@ const QUERY_PRE_UPGRADE = `{
 
 export default async function handler(_req: VercelRequest, res: VercelResponse) {
   try {
+    const apiKey = process.env.THEGRAPH_API_KEY || '';
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (apiKey) {
+      headers['Authorization'] = `Bearer ${apiKey}`;
+    }
+
     // Try post-upgrade query first
-    let response = await fetch(SUBGRAPH_URL, {
+    let response = await fetch(SUBGRAPH_BASE, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({ query: QUERY_POST_UPGRADE }),
     });
 
@@ -35,9 +41,9 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
 
     // If post-upgrade fields don't exist, the query may return errors — fall back
     if (json.errors || !json.data?.daovalues) {
-      response = await fetch(SUBGRAPH_URL, {
+      response = await fetch(SUBGRAPH_BASE, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ query: QUERY_PRE_UPGRADE }),
       });
 
