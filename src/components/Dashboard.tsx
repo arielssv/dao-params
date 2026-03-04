@@ -272,10 +272,9 @@ export function Dashboard() {
           {[
             { label: 'Blocks/Day', value: BLOCKS_PER_DAY.toLocaleString() },
             { label: 'Blocks/Year', value: BLOCKS_PER_YEAR.toLocaleString() },
-            { label: 'Gas Units (ETH)', value: GAS_UNITS_LIQUIDATION.toLocaleString() },
-            { label: 'Gas Units (SSV)', value: GAS_UNITS_LIQUIDATION_SSV.toLocaleString() },
+            { label: 'Gas Units (Liquidation)', value: denomFilter === 'ssv' ? GAS_UNITS_LIQUIDATION_SSV.toLocaleString() : GAS_UNITS_LIQUIDATION.toLocaleString() },
             { label: 'Network Fee %', value: `${NETWORK_FEE_PERCENT * 100}%` },
-            { label: 'DIP-49 ETH/SSV Cap', value: DIP49_ETHSSV_CAP.toString() },
+            ...(denomFilter === 'ssv' ? [{ label: 'DIP-49 ETH/SSV Cap', value: DIP49_ETHSSV_CAP.toString() }] : []),
           ].map((c) => (
             <div key={c.label}>
               <div className="text-xs text-gray-500 dark:text-gray-400">{c.label}</div>
