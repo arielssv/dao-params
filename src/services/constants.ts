@@ -1,6 +1,7 @@
 export const BLOCKS_PER_DAY = 7160;
 export const BLOCKS_PER_YEAR = BLOCKS_PER_DAY * 365; // 2,613,400
 export const GAS_UNITS_LIQUIDATION = 226578;
+export const GAS_UNITS_LIQUIDATION_SSV = 252800; // 13-operator cluster worst case (SSV params only)
 export const NETWORK_FEE_PERCENT = 0.01; // 1% of ETH APR
 export const DIP49_ETHSSV_CAP = 700; // ETH/SSV ratio cap per DIP-49
 

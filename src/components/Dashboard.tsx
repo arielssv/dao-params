@@ -6,6 +6,7 @@ import {
   BLOCKS_PER_DAY,
   BLOCKS_PER_YEAR,
   GAS_UNITS_LIQUIDATION,
+  GAS_UNITS_LIQUIDATION_SSV,
   NETWORK_FEE_PERCENT,
   DIP49_ETHSSV_CAP,
   ETH_DEFAULTS,
@@ -271,7 +272,8 @@ export function Dashboard() {
           {[
             { label: 'Blocks/Day', value: BLOCKS_PER_DAY.toLocaleString() },
             { label: 'Blocks/Year', value: BLOCKS_PER_YEAR.toLocaleString() },
-            { label: 'Gas Units (Liquidation)', value: GAS_UNITS_LIQUIDATION.toLocaleString() },
+            { label: 'Gas Units (ETH)', value: GAS_UNITS_LIQUIDATION.toLocaleString() },
+            { label: 'Gas Units (SSV)', value: GAS_UNITS_LIQUIDATION_SSV.toLocaleString() },
             { label: 'Network Fee %', value: `${NETWORK_FEE_PERCENT * 100}%` },
             { label: 'DIP-49 ETH/SSV Cap', value: DIP49_ETHSSV_CAP.toString() },
           ].map((c) => (

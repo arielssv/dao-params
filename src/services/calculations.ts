@@ -2,6 +2,7 @@ import {
   BLOCKS_PER_YEAR,
   BLOCKS_PER_DAY,
   GAS_UNITS_LIQUIDATION,
+  GAS_UNITS_LIQUIDATION_SSV,
   NETWORK_FEE_PERCENT,
   DIP49_ETHSSV_CAP,
 } from './constants';
@@ -59,7 +60,7 @@ export function calcNetworkFeeSSV(apr30d: number, ethSsvAvg: number): number {
 /** Min Liquidation Collateral (SSV) = 252,800 × (μ + σ) × 1e-9 × ETH/SSV_avg × MaxDev */
 export function calcMinCollateralSSV(gasStats: GasStats, ethSsvStats: EthSsvStats): number {
   return (
-    GAS_UNITS_LIQUIDATION *
+    GAS_UNITS_LIQUIDATION_SSV *
     (gasStats.mean + gasStats.stdev) *
     1e-9 *
     ethSsvStats.avg *
