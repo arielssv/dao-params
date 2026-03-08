@@ -313,6 +313,28 @@ export function DataExplorer() {
               </LineChart>
             </ResponsiveContainer>
           </ChartCard>
+          <ChartCard title="ETH Price (USD)">
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={filteredEthSsv}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" tickFormatter={formatDate} fontSize={11} interval="preserveStartEnd" />
+                <YAxis fontSize={11} tickFormatter={(v: number) => `$${v.toLocaleString()}`} />
+                <Tooltip labelFormatter={(label) => formatDate(String(label ?? ''))} formatter={(value) => [`$${Number(value).toFixed(2)}`, 'ETH/USD']} />
+                <Line type="monotone" dataKey="ethUsdt" stroke="#3b82f6" dot={false} strokeWidth={1.5} name="ETH/USD" />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartCard>
+          <ChartCard title="SSV Price (USD)">
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={filteredEthSsv}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" tickFormatter={formatDate} fontSize={11} interval="preserveStartEnd" />
+                <YAxis fontSize={11} tickFormatter={(v: number) => `$${v.toFixed(2)}`} />
+                <Tooltip labelFormatter={(label) => formatDate(String(label ?? ''))} formatter={(value) => [`$${Number(value).toFixed(4)}`, 'SSV/USD']} />
+                <Line type="monotone" dataKey="ssvUsdt" stroke="#10b981" dot={false} strokeWidth={1.5} name="SSV/USD" />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartCard>
           <ExportButtons data={filteredEthSsv} filename={`eth-ssv-prices_${dateFrom}_${dateTo}`} />
           <DataTable
             columns={['Date', 'ETH/USDT', 'SSV/USDT', 'ETH/SSV']}
