@@ -19,9 +19,17 @@ const SSV_LOGO = 'https://coin-images.coingecko.com/coins/images/19155/small/ssv
 
 function monthLabel(ym: string): string {
   if (ym === 'today') return 'Today';
-  const [year, month] = ym.split('-').map(Number);
   const names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  if (ym.length === 10) {
+    const [year, month, day] = ym.split('-').map(Number);
+    return `${names[month - 1]} ${day}, ${year}`;
+  }
+  const [year, month] = ym.split('-').map(Number);
   return `${names[month - 1]} ${year}`;
+}
+
+function todayIso(): string {
+  return new Date().toISOString().split('T')[0];
 }
 
 function blocksToDays(blocks: number): string {
@@ -89,6 +97,9 @@ export function Dashboard() {
 
   const [denomFilter, setDenomFilter] = useState<DenomFilter>('eth');
   const [selectedMonth, setSelectedMonth] = useState('today');
+  const [customDate, setCustomDate] = useState('');
+
+  const isCustomDateActive = selectedMonth.length === 10;
 
   useEffect(() => {
     calculate();
@@ -96,7 +107,15 @@ export function Dashboard() {
 
   function handleMonthFetch(month: string) {
     setSelectedMonth(month);
+    if (month.length !== 10) setCustomDate('');
     calculate(month);
+  }
+
+  function handleCustomDate(date: string) {
+    if (!date) return;
+    setCustomDate(date);
+    setSelectedMonth(date);
+    calculate(date);
   }
 
   // Generate month options: "Today" + last 6 months
@@ -234,7 +253,7 @@ export function Dashboard() {
         </div>
 
         {/* Period selector */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Period</span>
           <div className="flex items-center gap-1">
             {monthOptions.map((ym) => (
@@ -251,8 +270,41 @@ export function Dashboard() {
               </button>
             ))}
           </div>
+          <div className="flex items-center gap-1 pl-2 ml-1 border-l border-gray-200 dark:border-gray-600">
+            <span className="text-xs text-gray-400 dark:text-gray-500">or pick</span>
+            <input
+              type="date"
+              value={customDate}
+              max={todayIso()}
+              onChange={(e) => handleCustomDate(e.target.value)}
+              className={`px-2 py-1 text-xs rounded border transition-colors bg-white dark:bg-gray-800 dark:text-gray-200 ${
+                isCustomDateActive
+                  ? 'border-blue-600 ring-1 ring-blue-600 text-blue-700 dark:text-blue-300'
+                  : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400'
+              }`}
+            />
+          </div>
         </div>
       </div>
+
+      {/* Active date range indicator */}
+      {(networkFeeDateRange || liquidationDateRange) && (
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400 -mt-1">
+          <span className="font-medium text-gray-600 dark:text-gray-300">
+            Showing: {monthLabel(selectedMonth)}
+          </span>
+          {networkFeeDateRange && (
+            <span>
+              <span className="font-medium">Network Fee window:</span> {networkFeeDateRange}
+            </span>
+          )}
+          {liquidationDateRange && (
+            <span>
+              <span className="font-medium">Liquidation window:</span> {liquidationDateRange}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* All parameter cards — consecutive, no section headers */}
       <div className={`space-y-2 relative transition-opacity ${loading ? 'opacity-40 pointer-events-none' : ''}`}>

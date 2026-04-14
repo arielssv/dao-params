@@ -112,22 +112,34 @@ export function useParameters() {
   function buildResults(cache: CachedData, aprData: EthAprResponse, targetMonth: string, isToday: boolean) {
     const apr31d = aprData.avgApr31d;
 
+    const isSpecificDate = !isToday && targetMonth.length === 10;
+
     // End date for lookback windows
     const today = new Date().toISOString().split('T')[0];
-    const endDate = isToday ? today : lastDayOfMonth(targetMonth);
+    let endDate: string;
+    if (isToday) endDate = today;
+    else if (isSpecificDate) endDate = targetMonth;
+    else endDate = lastDayOfMonth(targetMonth);
 
-    // ETH/SSV: average over the target month (for "today", use current month)
-    const ethSsvFilterMonth = isToday
-      ? `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`
-      : targetMonth;
-    const ethSsvMonthData = filterByMonth(cache.ethSsvData, ethSsvFilterMonth);
+    // ETH/SSV: average over the target month (for "today" or specific date, the month
+    // containing that date — but capped at endDate so future days within the month are excluded)
+    let ethSsvFilterMonth: string;
+    if (isToday) {
+      ethSsvFilterMonth = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
+    } else if (isSpecificDate) {
+      ethSsvFilterMonth = targetMonth.slice(0, 7);
+    } else {
+      ethSsvFilterMonth = targetMonth;
+    }
+    const ethSsvMonthData = filterByMonth(cache.ethSsvData, ethSsvFilterMonth)
+      .filter((d) => d.date <= endDate);
 
     // Liquidation params: 6-month lookback ending at the selected period
     // For specific months: 6 full calendar months (e.g. Jan 31 → Aug 1)
-    // For "today": 6 months back from today's date
+    // For "today" or specific date: 6 months back from that date
     let liq6mStartStr: string;
-    if (isToday) {
-      const cutoff = new Date();
+    if (isToday || isSpecificDate) {
+      const cutoff = new Date(endDate);
       cutoff.setMonth(cutoff.getMonth() - 6);
       liq6mStartStr = cutoff.toISOString().split('T')[0];
     } else {
@@ -232,7 +244,10 @@ export function useParameters() {
     try {
       const targetMonth = month || 'today';
       const isToday = targetMonth === 'today';
-      const targetDate = isToday ? undefined : lastDayOfMonth(targetMonth);
+      const isSpecificDate = !isToday && targetMonth.length === 10;
+      const targetDate = isToday
+        ? undefined
+        : (isSpecificDate ? targetMonth : lastDayOfMonth(targetMonth));
 
       // If we have cached data and this isn't a force refresh, only re-fetch APR
       if (cacheRef.current && !forceRefresh) {
