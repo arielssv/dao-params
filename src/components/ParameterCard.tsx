@@ -73,9 +73,18 @@ export function ParameterCard({ param, inputs }: ParameterCardProps) {
   return (
     <div className="bg-white rounded-lg shadow dark:bg-gray-800">
       {/* Clickable header row */}
-      <button
+      <div
+        role="button"
+        tabIndex={0}
+        aria-expanded={expanded}
         onClick={() => setExpanded(!expanded)}
-        className="w-full text-left px-5 py-3.5 flex items-start hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors rounded-lg"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setExpanded(!expanded);
+          }
+        }}
+        className="w-full cursor-pointer text-left px-5 py-3.5 flex items-start hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
       >
         {/* Name */}
         <div className="w-[220px] flex-shrink-0 pt-3">
@@ -129,7 +138,7 @@ export function ParameterCard({ param, inputs }: ParameterCardProps) {
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
-      </button>
+      </div>
 
       {/* Expanded details */}
       {expanded && (
