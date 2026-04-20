@@ -12,7 +12,7 @@ import {
   calcThresholdETH,
   checkDeviation,
 } from '../services/calculations';
-import { ETH_DEFAULTS, BLOCKS_PER_YEAR } from '../services/constants';
+import { BLOCKS_PER_YEAR } from '../services/constants';
 import type {
   GasPriceEntry,
   EthSsvPriceEntry,
@@ -40,7 +40,6 @@ export interface ParametersState {
   liquidationDateRange: string; // "YYYY-MM-DD to YYYY-MM-DD"
   // General
   daoValues: DaoValues | null;
-  isPostUpgrade: boolean;
   subgraphError: string | null;
   gasData: GasPriceEntry[];
   ethSsvData: EthSsvPriceEntry[];
@@ -52,7 +51,6 @@ interface CachedData {
   daoValues: DaoValues | null;
   subgraphError: string | null;
   // Current on-chain values
-  isPostUpgrade: boolean;
   currentSsvNetworkFee: number;
   currentSsvMinCollateral: number;
   currentSsvThreshold: number;
@@ -99,7 +97,6 @@ export function useParameters() {
     networkFeeDateRange: '',
     liquidationDateRange: '',
     daoValues: null,
-    isPostUpgrade: false,
     subgraphError: null,
     gasData: [],
     ethSsvData: [],
@@ -261,7 +258,6 @@ export function useParameters() {
           lastUpdated: new Date(),
           ...results,
           daoValues: cacheRef.current!.daoValues,
-          isPostUpgrade: cacheRef.current!.isPostUpgrade,
           subgraphError: cacheRef.current!.subgraphError,
           gasData: cacheRef.current!.gasData,
           ethSsvData: cacheRef.current!.ethSsvData,
@@ -282,42 +278,16 @@ export function useParameters() {
       ]);
 
       // Current on-chain values
-      const isPostUpgrade = daoValues?.networkFeeSSV != null;
-
-      let currentSsvNetworkFee: number;
-      let currentSsvMinCollateral: number;
-      let currentSsvThreshold: number;
-      let currentEthNetworkFee: number;
-      let currentEthMinCollateral: number;
-      let currentEthThreshold: number;
-
-      if (isPostUpgrade && daoValues) {
-        currentSsvNetworkFee = parseWei(daoValues.networkFeeSSV);
-        currentSsvMinCollateral = parseWei(daoValues.minimumLiquidationCollateralSSV);
-        currentSsvThreshold = parseRaw(daoValues.liquidationThresholdSSV);
-        currentEthNetworkFee = parseWei(daoValues.networkFee);
-        currentEthMinCollateral = parseWei(daoValues.minimumLiquidationCollateral);
-        currentEthThreshold = parseRaw(daoValues.liquidationThreshold);
-      } else if (daoValues) {
-        currentSsvNetworkFee = parseWei(daoValues.networkFee);
-        currentSsvMinCollateral = parseWei(daoValues.minimumLiquidationCollateral);
-        currentSsvThreshold = parseRaw(daoValues.liquidationThreshold);
-        currentEthNetworkFee = ETH_DEFAULTS.networkFee;
-        currentEthMinCollateral = ETH_DEFAULTS.minimumLiquidationCollateral;
-        currentEthThreshold = ETH_DEFAULTS.liquidationThreshold;
-      } else {
-        currentSsvNetworkFee = 0;
-        currentSsvMinCollateral = 0;
-        currentSsvThreshold = 0;
-        currentEthNetworkFee = ETH_DEFAULTS.networkFee;
-        currentEthMinCollateral = ETH_DEFAULTS.minimumLiquidationCollateral;
-        currentEthThreshold = ETH_DEFAULTS.liquidationThreshold;
-      }
+      const currentSsvNetworkFee = daoValues ? parseWei(daoValues.networkFeeSSV) : 0;
+      const currentSsvMinCollateral = daoValues ? parseWei(daoValues.minimumLiquidationCollateralSSV) : 0;
+      const currentSsvThreshold = daoValues ? parseRaw(daoValues.liquidationThresholdSSV) : 0;
+      const currentEthNetworkFee = daoValues ? parseWei(daoValues.networkFee) : 0;
+      const currentEthMinCollateral = daoValues ? parseWei(daoValues.minimumLiquidationCollateral) : 0;
+      const currentEthThreshold = daoValues ? parseRaw(daoValues.liquidationThreshold) : 0;
 
       // Cache raw data and on-chain values (don't change with period)
       cacheRef.current = {
         gasData, ethSsvData, daoValues, subgraphError,
-        isPostUpgrade,
         currentSsvNetworkFee, currentSsvMinCollateral, currentSsvThreshold,
         currentEthNetworkFee, currentEthMinCollateral, currentEthThreshold,
       };
@@ -330,7 +300,6 @@ export function useParameters() {
         lastUpdated: new Date(),
         ...results,
         daoValues,
-        isPostUpgrade,
         subgraphError,
         gasData,
         ethSsvData,

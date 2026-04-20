@@ -29,9 +29,9 @@ export interface DaoValues {
   networkFee: string;
   minimumLiquidationCollateral: string;
   liquidationThreshold: string;
-  networkFeeSSV: string | null;
-  minimumLiquidationCollateralSSV: string | null;
-  liquidationThresholdSSV: string | null;
+  networkFeeSSV: string;
+  minimumLiquidationCollateralSSV: string;
+  liquidationThresholdSSV: string;
 }
 
 export interface GasStats {

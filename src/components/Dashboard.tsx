@@ -9,7 +9,6 @@ import {
   GAS_UNITS_LIQUIDATION_SSV,
   NETWORK_FEE_PERCENT,
   DIP49_ETHSSV_CAP,
-  ETH_DEFAULTS,
 } from '../services/constants';
 
 type DenomFilter = 'ssv' | 'eth';
@@ -88,7 +87,6 @@ export function Dashboard() {
     networkFeeEthSsvAvg,
     networkFeeMonth,
     daoValues,
-    isPostUpgrade,
     subgraphError,
     networkFeeDateRange,
     liquidationDateRange,
@@ -170,35 +168,21 @@ export function Dashboard() {
   }
 
   // Contract values for the selected denomination
-  function getContractValues(): { label: string; value: string; tag?: string }[] {
+  function getContractValues(): { label: string; value: string }[] {
     if (!daoValues) return [];
 
     if (denomFilter === 'ssv') {
-      // Pre-upgrade: networkFee/minimumLiquidationCollateral/liquidationThreshold are SSV
-      const nfWei = isPostUpgrade ? daoValues.networkFeeSSV : daoValues.networkFee;
-      const mcWei = isPostUpgrade ? daoValues.minimumLiquidationCollateralSSV : daoValues.minimumLiquidationCollateral;
-      const ltRaw = isPostUpgrade ? daoValues.liquidationThresholdSSV : daoValues.liquidationThreshold;
       return [
-        { label: 'Network Fee', value: nfWei ? `${weiToAnnual(nfWei)} SSV/year (${nfWei} wei/block)` : 'N/A' },
-        { label: 'Min Liquidation Collateral', value: mcWei ? `${weiToHuman(mcWei)} SSV (${mcWei} wei)` : 'N/A' },
-        { label: 'Liquidation Threshold', value: ltRaw ? `${parseInt(ltRaw).toLocaleString()} blocks (${blocksToDays(parseInt(ltRaw))})` : 'N/A' },
+        { label: 'Network Fee', value: `${weiToAnnual(daoValues.networkFeeSSV)} SSV/year (${daoValues.networkFeeSSV} wei/block)` },
+        { label: 'Min Liquidation Collateral', value: `${weiToHuman(daoValues.minimumLiquidationCollateralSSV)} SSV (${daoValues.minimumLiquidationCollateralSSV} wei)` },
+        { label: 'Liquidation Threshold', value: `${parseInt(daoValues.liquidationThresholdSSV).toLocaleString()} blocks (${blocksToDays(parseInt(daoValues.liquidationThresholdSSV))})` },
       ];
     }
 
-    // ETH denomination
-    if (isPostUpgrade) {
-      return [
-        { label: 'Network Fee', value: `${weiToAnnual(daoValues.networkFee)} ETH/year (${daoValues.networkFee} wei/block)` },
-        { label: 'Min Liquidation Collateral', value: `${weiToHuman(daoValues.minimumLiquidationCollateral)} ETH (${daoValues.minimumLiquidationCollateral} wei)` },
-        { label: 'Liquidation Threshold', value: `${parseInt(daoValues.liquidationThreshold).toLocaleString()} blocks (${blocksToDays(parseInt(daoValues.liquidationThreshold))})` },
-      ];
-    }
-
-    // Pre-upgrade: ETH values are defaults
     return [
-      { label: 'Network Fee', value: `${(ETH_DEFAULTS.networkFee * BLOCKS_PER_YEAR).toPrecision(6)} ETH/year`, tag: 'default' },
-      { label: 'Min Liquidation Collateral', value: `${ETH_DEFAULTS.minimumLiquidationCollateral} ETH`, tag: 'default' },
-      { label: 'Liquidation Threshold', value: `${ETH_DEFAULTS.liquidationThreshold.toLocaleString()} blocks (${blocksToDays(ETH_DEFAULTS.liquidationThreshold)})`, tag: 'default' },
+      { label: 'Network Fee', value: `${weiToAnnual(daoValues.networkFee)} ETH/year (${daoValues.networkFee} wei/block)` },
+      { label: 'Min Liquidation Collateral', value: `${weiToHuman(daoValues.minimumLiquidationCollateral)} ETH (${daoValues.minimumLiquidationCollateral} wei)` },
+      { label: 'Liquidation Threshold', value: `${parseInt(daoValues.liquidationThreshold).toLocaleString()} blocks (${blocksToDays(parseInt(daoValues.liquidationThreshold))})` },
     ];
   }
 
@@ -215,7 +199,7 @@ export function Dashboard() {
           <span className="mt-0.5 flex-shrink-0">&#9888;</span>
           <div>
             <span className="font-medium">Unable to fetch on-chain values.</span>
-            {' '}ETH parameters use proposal defaults. SSV current values unavailable.
+            {' '}Current values unavailable — deviation checks will show 0.
             <div className="text-xs mt-1 opacity-75">{subgraphError}</div>
           </div>
         </div>
@@ -345,9 +329,6 @@ export function Dashboard() {
                 <div className="text-xs text-gray-500 dark:text-gray-400">{cv.label}</div>
                 <div className="text-sm font-mono font-medium dark:text-gray-200">
                   {cv.value}
-                  {cv.tag && (
-                    <span className="text-[10px] text-amber-500 ml-1">{cv.tag}</span>
-                  )}
                 </div>
               </div>
             ))
