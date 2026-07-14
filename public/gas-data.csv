@@ -95,7 +95,7 @@
         
     </style>
 
-    <style> .dk7ej797pwy { -ms-flex-pack: center; justify-content: center; } .al1u2jg3kcg { border-top: 1px solid #e7eaf3 !important; } body.dark-mode .al1u2jg3kcg { border-color: #18365b !important; } @media (min-width: 992px) { .b19vnjfprhn { display: block !important; } } @media (min-width: 992px) { .cpgy8csqvaz { display: inline-block !important; } }  </style>
+    <style> .dvz6kyuhdgz { -ms-flex-pack: center; justify-content: center; } .ay3hfh6v14m { border-top: 1px solid #e7eaf3 !important; } body.dark-mode .ay3hfh6v14m { border-color: #18365b !important; } @media (min-width: 992px) { .bbtywkwpqxc { display: block !important; } } @media (min-width: 992px) { .cmw7v14heke { display: inline-block !important; } }  </style>
     <style>
         .circle-icon-text{color: #0784c3; padding-right: 3px;}
         .highcharts-tooltip-box {
@@ -536,7 +536,7 @@
         <div class="container-xxl d-flex align-items-center justify-content-between">
             
             <div id="ethPrice" class="d-none d-md-flex align-items-center gap-4 w-100 fs-sm">                
-                <div class="text-muted"><span class="text-muted">ETH Price:</span> <a href='/chart/etherprice'>$1,785.76</a><span data-bs-toggle="tooltip" data-bs-placement="top" title="Changes in the last 24 hours"><span class='text-danger'> (-0.74%)</span></span></div><div class='text-muted d-none d-lg-block'><i class="fad fa-gas-pump me-1"></i> Gas: <span id='spanGasTooltip' data-bs-toggle='tooltip' data-bs-html='true' title='Base Fee: 0.069 Gwei<br>Priority Fee: 0.001 Gwei'><a href='/gastracker'><span class='gasPricePlaceHolder'>0.07</span> Gwei</a></span></div>
+                <div class="text-muted"><span class="text-muted">ETH Price:</span> <a href='/chart/etherprice'>$1,779.14</a><span data-bs-toggle="tooltip" data-bs-placement="top" title="Changes in the last 24 hours"><span class='text-danger'> (-0.39%)</span></span></div><div class='text-muted d-none d-lg-block'><i class="fad fa-gas-pump me-1"></i> Gas: <span id='spanGasTooltip' data-bs-toggle='tooltip' data-bs-html='true' title='Base Fee: 0.193 Gwei<br>Priority Fee: 0 Gwei'><a href='/gastracker'><span class='gasPricePlaceHolder'>0.193</span> Gwei</a></span></div>
                 </div>
 
             <div class="d-flex justify-content-end align-items-center gap-2 w-100">
@@ -1168,7 +1168,7 @@
         
 
     <form method="post" action="./gasprice?output=csv" id="form1">
-<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="ZZHDXQUzWsusFmtkzluiKoOnRwDUA/AuwQoM5AY/iOSexzxCoETwiZ7CE3MxPC6/5VHMryvMsE0IZrHMthXaptBkP+ZboLMkcnuVL932MHrHFLm6vZveGQsuN1CsQSwYplGlDqIvSq6pKU35u7yD3ve8mMGIOKeGN3rBMBl1Mecu6oeUBVJ4imKIycZuj/KKNT9wOmPje0Q1qmmA96Vp2ag6PRG46sniHSJ3pdcTnMQnVUiAMThI87rI7K8B7cjNTkX/hFzHbBdtAOgAZgNfP+xqQ0HtKEkLNVi3HcORIWDkvKuvK29G9dhW0S7n+kFeZDvQXPJjOqQba65Et65Zwu4c7aTl/6sG4mGCo+vsIqLsGJxFClfGuyEBGO5jENtBr3+eZECphDqAcSxD/qasAVR5O1Gn9a3MCzZk4PH9JjS9YcpSdwrbHGNnhBuw+R/4PCfVQ6HBikANxZ4lvkIiUSPO5tfEef6YocZi6mm2TDKOihHcgeFVKYX0OQfl84Mki6pkIeMBVOO9Eab8jEEOd6zko7u4OdAawfllynzrA7pOItY6+eu/RF2zk7N10z/BK1tXRas22rXC30+u4UASlOScO5uzHKlOpk3qKt8YW+xm2/H3/ZMUohRuTav22VewdcocxUvKu54R8W4QY9C11ogDDWl3Ng1l/SZYNmxPwJqtRV4W3QKF2lVZH7DJRSpj8pnogiuZVgyzAAZFYb9yphQKHjh6WBaPF5pcVvbzCXHJVdwBaLHf0RlW0BYL3uEzK38KaBvVJfNpfRJtSe993icBFrfkMB4y0GUyWhhTZL0ygmM4tfL2Sh46vI5E3NHkXFfo5ygF+A/48ODkG8DMp3EbAPx7iZYlrDYf39hUPIhzPxgzhnTE8tXdHTI52DR4EleEvU5vqcvRF4QJm8lHHOkj7NwaraQOh1bC5rGHnjNe5M1XsHK1NtU7UBc5MIdG7g5r++NPKMbWYL520/XKVHRzAbuQsTouqhWbdjMv0kMHu6ioG6c+z9Umq1ITkLYBe4kGF6LIg6dRyKpRw1DWeFuuleveTFoT4RHb4TilmRVvoh3SC3iFFDBmtM0t+dzgUonwKbiRjl2S/EPn6tWZY9Nk6uLeVFsNB5w2KF38LSTfciWd05b6+sOsfG8WfLIX3/d5+XGTbaXDLFaH3FMuVXQA94xIF+iMlaqrvnxXsv+iR3PEzw4TBoE6nITYULYdmTsFYNjbF5M/JnoKKYUgFaVi0pMbYNEcZTGXK6ZQQIWVGzTJF6i3y5FNffHh5n7JkFuyOD89x61qBiWqZ3hYysjLL7btSPm7KG4q/AdWmBcstqmoWT+uiWnr+IPhc0evg5LUzVhboHQgO7EZtzRIWmKYXPbJ4H0nGjCSydW6XBj3xXy6yILYA+xcI9Jxg/TQxfBW0GbXU0S+4NhsrTT+pBKNHZcDv9vvkZt2jbrX95/NUJeJcQp+JD4EusChCyN2WAVD95MR1lYZ12kzdusLwtvHXKnUAounrvrBok9NwtkFPm9e8qd8wikBL36oOt4O9s9gr8cSSDLha3Sis8HI4cGvAVtfhH4xaOadbslo7jGmTt+qm4qkk5jc1o7Gf/9EuIRd5sugpduNQHoJBRocWstmPf5zL5xaia7M1ait8Ktf8x74I+f57TQi+zHOWitRNLf/H9U5fSY+KLPYg7fEqFDf/4LUfBx6ictE8sJ04e3jSZoVXJp+LToZL7B5vbks+q7f0859ts7/MzTMlOa/O4WhFOoBx9/I4DpE5gVnDIXFbS4TBwgAzDNfPUCJS3IRClysssvf96LwtC2CTiUCTF33nWighyY5n0XiVq899jYsNoSaii9uEuHnql0tm15vCkjCRMJUFgj0dSSQhj/v/QRdeaEF2Qv4UjdpNUfsq5dBQJfglCmYpvufVlIfRFxLUknPiQejqEVCPRNeEJWncSv/d0nniICJymO/U691fbAOg+Ce9HdBV2J7KMxdVUL4HsZqisdnDwBCBkXuWGQwZkLnGDRKBIfpo7A4o7nlGLNQ4INAcWetW1txTp26bYahU7N2SsNTiu3Kad5gNa73bE8Opl1+rkMbf0lTJJQfdTJqw1rQRFGXPB39ll9zjaSQnk29uZ9QIovkguuQDgs+62VMcfgSLYgcfTSBnQIai4xHPQCM931b6tdkUvN4vi3NmLxaesj9f5gZ5pHPQBrP32HDLEPAEZNl8JL6i+n5c9bcX82al18uXRH+dxPcxOBbSnrr4/xWCKFNVV2RNVea2GByYSrPhwAT7ItANKJV5M1BA4AmSwwPB01taNv7EC0zTvM2aKi8N5N0W8ZxTRvMVKtL7HVu0te4A8YPfvv8yMrv4yaLNUIv5rPJm99xrgFdYjW2Fjm3BR4T9VDWdhBrY2IcRCdTakMa99JdmvjHIdEv1F31BXH8t+jofinE13w6ikSC6PVVyxiRChLhoEHrulR13NVRHdLCfhYDUSxtLpqOjSw/aoJqcii8WAsQ8ZaEGY2ExWAz+C0bRtNenFkiLg==" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
 
 <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="880B5DAF" />
 
@@ -1539,7 +1539,7 @@
             <div class="border-top py-4">
                 <div class="row justify-content-between align-items-center fs-sm">
                     <div class="col-md mb-2 mb-md-0">
-                        <p class="mb-0">Etherscan © 2026  (C1)</p>
+                        <p class="mb-0">Etherscan © 2026  (D1)</p>
                     </div>
 
                     <div class="col-md text-md-end">
@@ -1655,7 +1655,7 @@
     </script>
     
     <script type="text/javascript">
-        var sid = '25c1974a803b5db54644be7462592d1f';
+        var sid = 'd15900b30472fefeaf4c2ffc36d77f95';
         var strGlobal = getCookie("etherscan_switch_age_datetime");
         var strGlobalFee = sessionStorage.getItem("ShowFee");
         var strGlobalSlotEpoch = sessionStorage.getItem("ShowSlotEpoch");
